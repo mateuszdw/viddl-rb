@@ -7,7 +7,7 @@ module ViddlRb
       no_ext_filename = file_path.split('.')[0..-1][0]
       #capture stderr because ffmpeg expects an output param and will error out
       puts "Gathering information about the downloaded file."
-      file_info = Open3.popen3("ffmpeg -i #{save_dir+file_path}") {|stdin, stdout, stderr, wait_thr| stderr.read }
+      file_info = Open3.popen3("ffmpeg -i #{file_path}",:chdir=>save_dir) {|stdin, stdout, stderr, wait_thr| stderr.read }
       puts "Done gathering information about the downloaded file."
 
       if !file_info.to_s.empty?
