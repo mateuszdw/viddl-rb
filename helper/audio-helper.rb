@@ -39,6 +39,7 @@ module ViddlRb
         end
         Open3.popen3("ffmpeg -i #{file_path} -vn -acodec copy #{output_filename}",:chdir=>save_dir) { |stdin, stdout, stderr, wait_thr| stdout.read }
         puts "Done extracting audio to #{output_filename}"
+        output_filename
       else
         raise "ERROR: Error while checking audio track of #{file_path}"
       end
