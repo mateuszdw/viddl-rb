@@ -5,9 +5,10 @@ module ViddlRb
 
     def self.extract(file_path, save_dir)
       no_ext_filename = file_path.split('.')[0..-1][0]
+      full_file_path = File.join(save_dir,file_path)
       #capture stderr because ffmpeg expects an output param and will error out
       puts "Gathering information about the downloaded file."
-      file_info = Open3.popen3("ffmpeg -i #{file_path}",:chdir=>save_dir) {|stdin, stdout, stderr, wait_thr| stderr.read }
+      file_info = Open3.popen3("ffmpeg -i #{full_file_path}") {|stdin, stdout, stderr, wait_thr| stderr.read }
       puts "Done gathering information about the downloaded file."
 
       if !file_info.to_s.empty?
@@ -37,7 +38,7 @@ module ViddlRb
           puts "Audio file seems to exist already, removing it before extraction."
           File.delete(output_filename)
         end
-        Open3.popen3("ffmpeg -i #{file_path} -vn -acodec copy #{output_filename}",:chdir=>save_dir) { |stdin, stdout, stderr, wait_thr| stdout.read }
+        Open3.popen3("ffmpeg -i #{full_file_path} -vn -acodec copy #{output_filename}") { |stdin, stdout, stderr, wait_thr| stdout.read }
         puts "Done extracting audio to #{output_filename}"
         output_filename
       else
